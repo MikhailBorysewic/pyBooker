@@ -2,7 +2,7 @@ from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-from ..serializers import BookSerializer, AuthorSerializer, QuoteSerializer
+from ..serializers import BookSerializer, AuthorSerializer, QuoteSerializer, PublisherSerializer
 from ..services.book import get_recent_published_books, get_book_by_pk
 from ..models import Book
 
@@ -37,3 +37,9 @@ class BookViewSet(viewsets.ModelViewSet):
 
         book = get_book_by_pk(pk)
         return Response(QuoteSerializer(book.review_set, many=True).data)
+
+    @action(detail=True, url_path=r"publishers")
+    def book_publishers(self, request, pk: int):
+
+        book = get_book_by_pk(pk)
+        return Response(PublisherSerializer(book.publishers, many=True).data)
